@@ -1,5 +1,5 @@
 After having quite a bit of frustration migrating Ombi to MySQL
-Since none addressed Docker clearly, especially within Unraid, I figured I'd post what I used to get it to work.
+Since no one addressed Docker clearly, especially within Unraid, I figured I'd post what I used to get it to work.
 This was with the linuxserver Ombi docker.
 
 
