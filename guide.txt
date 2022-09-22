@@ -1,0 +1,33 @@
+After having quite a bit of frustration migrating Ombi to MySQL
+Since none addressed Docker clearly, especially within Unraid, I figured I'd post what I used to get it to work.
+This was with the linuxserver Ombi docker.
+
+
+# Create your Ombi DB's in MySQL, applying a user permissions (I used u:ombi p:ombi to simplify):
+# DB's:
+# - Ombi
+# - Ombi_External
+# - Ombi_Settings
+
+# Place the 'ombi_sqlite2mysql.py' file in the root Ombi appdata folder:
+
+# SSH into Unraid and enter the Ombi docker with:
+docker exec -it ombi /bin/bash
+
+# Install python:
+apt update; apt install python3 python3-mysqldb -y;
+
+# Run command to create tables in DB:
+/app/ombi/Ombi --migrate
+
+# Move to config directory (Ombi appdata folder):
+cd config
+
+# Run command to create migration json (unsure if this step was necessary but I followed it):
+python3 ombi_sqlite2mysql.py -c /config --only_manager_json
+
+# And finally migrate (with --host being your MySQL docker IP and the credentials created above when creating the DB's):
+python3 ombi_sqlite2mysql.py -c /config --host 192.168.1.20 --user ombi --passwd ombi
+
+After which you should be able to restart Ombi and be able to log in as if all was the same, just snappier. 
+The Python libraries are only required for migration, so updates shouldnt break it 
